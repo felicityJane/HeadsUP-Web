@@ -1,7 +1,6 @@
 ﻿@using User = MvcApplication.Model.User
 @model IEnumerable<User>
 
-
 <div class="row">
     <div class="container">
         <div class="row">
@@ -27,9 +26,12 @@
                                 <dd>
                                     @Html.DisplayFor(model => item.Device)
                                 </dd>
-                                <p>
-                                    @Html.ActionLink("Delete", "Delete", item.UserName)
-                                </p>
+                                <div style="display: none;" id="exp-@item.UserName" class="addedExpToClass alert alert-success">
+                                    <div></div>
+                                </div>
+                                <div>
+                                    <a value="@item.UserName" class="delete btn btn-primary">Delete</a>
+                                </div>
                             </dl>
                         </div>
                     </div>
@@ -39,4 +41,32 @@
     </div>
 </div>
 
+@section scripts{
+    <script>
+        $(function () {
+            $('.delete').click(function (event) {
+                var id = $(this).attr('value');
+                $.ajax({
+                    type: "POST",
+                    url: "/user/delete",
+                    dataType: "json",
+                    data: { id : id},
+                    success: function (result) {
+                        $("#exp-" + id).fadeTo(2000, 500).slideUp(500, function () {
+                            $("#exp-" + id).slideUp(500);
+                        });
+                        $("#exp-" + id).html(result.responseMessage);
+                        $("#exp-" + id + " > div").addClass('alert alert-info');
 
+                        setTimeout(function(){
+                            location.reload(); 
+                        }, 1000);
+
+                    }, error: function () {
+
+                    }
+                });
+            });
+        });
+    </script>
+}

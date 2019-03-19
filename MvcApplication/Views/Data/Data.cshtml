@@ -1,11 +1,15 @@
 ﻿@using SensorData = MvcApplication.Model.SensorData
 @model IEnumerable<SensorData>
 
+<h1>Heads UP - Sensor Data</h1>
+
+<div class="col-md-offset-2 col-md-10">
+    <div id="msg" class="field-validation-error text-danger">@TempData["Error"]</div>
+</div>
 
 <div class="row">
     <div class="container">
         <div class="row">
-            <h1>Heads UP - Sensor Data</h1>
             <div class="list-group">
                 @foreach (var item in Model)
                 {
@@ -13,11 +17,11 @@
                         <div>
                             <dl class="dl-horizontal">
                                 <dt>
-                                    @Html.LabelFor(model =>item.DateTime);
+                                    @Html.LabelFor(model => item.DateTime);
                                 </dt>
 
                                 <dd>
-                                   @Html.DisplayFor(model =>item.DateTime)
+                                    @Html.DisplayFor(model => item.DateTime)
                                 </dd>
 
                                 <dt>
@@ -35,9 +39,12 @@
                                 <dd>
                                     @Html.DisplayFor(model => item.UserId)
                                 </dd>
-                                <p>
-                                    @Html.ActionLink("Delete", "Delete", item.UserId)
-                                </p>
+                                <div style="display: none;" id="exp-@item.Id" class="addedExpToClass alert alert-success">
+                                    <div></div>
+                                </div>
+                                <div>
+                                    <a value="@item.Id" class="delete btn btn-primary">Delete</a>
+                                </div>
                             </dl>
                         </div>
                     </div>
@@ -46,4 +53,32 @@
         </div>
     </div>
 </div>
+@section scripts{
+    <script>
+        $(function () {
+            $('.delete').click(function (event) {
+                var id = $(this).attr('value');
+                $.ajax({
+                    type: "POST",
+                    url: "/data/delete",
+                    dataType: "json",
+                    data: { id : id},
+                    success: function (result) {
+                        $("#exp-" + id).fadeTo(2000, 500).slideUp(500, function () {
+                            $("#exp-" + id).slideUp(500);
+                        });
+                        $("#exp-" + id).html(result.responseMessage);
+                        $("#exp-" + id + " > div").addClass('alert alert-info');
 
+                        setTimeout(function(){// wait for 5 secs(2)
+                            location.reload(); // then reload the page.(3)
+                        }, 1000); 
+
+                    }, error: function () {
+
+                    }
+                });
+            });
+        });
+    </script>
+}

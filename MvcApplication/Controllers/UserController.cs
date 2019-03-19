@@ -49,5 +49,32 @@ namespace MvcApplication.Controllers
 
             return View(user);
         }
+
+        [CustomAuthorizeRedirect(Roles = "admin")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            using (var client = new HttpClient())
+            {
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+
+                // Extract tokens
+                string accessToken = claimsIdentity?.FindFirst(c => c.Type == "access_token")?.Value;
+                // string idToken = claimsIdentity?.FindFirst(c => c.Type == "id_token")?.Value;
+
+                client.BaseAddress = new Uri("http://localhost:54111/user/deleteuser/");
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+
+                HttpResponseMessage response = await client.DeleteAsync(id);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Json(new { status = 201, responseMessage = "User " + id + " removed from user table" });
+                }
+                return Json(new { status = 500, responseMessage = "An error occured" });
+            }
+        }
+
     }
 }

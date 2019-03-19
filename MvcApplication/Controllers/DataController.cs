@@ -49,5 +49,58 @@ namespace MvcApplication.Controllers
 
             return View(data);
         }
+
+        [CustomAuthorizeRedirect(Roles = "admin")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+
+                // Extract tokens
+                string accessToken = claimsIdentity?.FindFirst(c => c.Type == "access_token")?.Value;
+                // string idToken = claimsIdentity?.FindFirst(c => c.Type == "id_token")?.Value;
+
+                client.BaseAddress = new Uri("http://localhost:54111/sensor/deletesensordata/");
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                string userId = id.ToString();
+
+                HttpResponseMessage response = await client.DeleteAsync(userId);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Json(new { status = 201, responseMessage = "Entry " + id + " removed from sensor data table" });
+                }
+                return Json(new { status = 500, responseMessage = "An error occured" });
+            }      
+        }
+
+        [CustomAuthorizeRedirect(Roles = "admin")]
+        public async Task<ActionResult> DeleteAll(string userId)
+        {
+            using (var client = new HttpClient())
+            {
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+
+                // Extract tokens
+                string accessToken = claimsIdentity?.FindFirst(c => c.Type == "access_token")?.Value;
+                // string idToken = claimsIdentity?.FindFirst(c => c.Type == "id_token")?.Value;
+
+                client.BaseAddress = new Uri("http://localhost:54111/sensor/deletesensordataUser/");
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+
+                HttpResponseMessage response = await client.DeleteAsync(userId);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Json(new { status = 201, responseMessage = "All entries removed for " + userId + " from sensor data table" });
+                }
+                return Json(new { status = 500, responseMessage = "An error occured" });
+            }
+        }
     }
 }
