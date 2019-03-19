@@ -1,0 +1,31 @@
+﻿@using UserProfileViewModel = MvcApplication.Model.UserProfileViewModel
+@model UserProfileViewModel
+
+@{
+    ViewBag.Title = "UserProfile";
+}
+
+<div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <h2>@ViewData["Title"].</h2>
+
+                <div class="col-md-2">
+                    <img src="@Model.ProfileImage"
+                         alt="" class="img-rounded img-responsive" />
+                </div>
+                <div class="col-md-4">
+                    <h3>@Model.Name</h3>
+                    <div>
+                        <i class="glyphicon glyphicon-envelope"></i> @Model.EmailAddress
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,42 @@
+﻿@using User = MvcApplication.Model.User
+@model IEnumerable<User>
+
+
+<div class="row">
+    <div class="container">
+        <div class="row">
+            <h1>Heads Up - Sensor User Data</h1>
+            <div class="list-group">
+                @foreach (var item in Model)
+                {
+                    <div class="list-group-item">
+                        <div>
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    @Html.LabelFor(model => item.UserName)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => item.UserName)
+                                </dd>
+
+                                <dt>
+                                    @Html.LabelFor(model => item.Device)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => item.Device)
+                                </dd>
+                                <p>
+                                    @Html.ActionLink("Delete", "Delete", item.UserName)
+                                </p>
+                            </dl>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+

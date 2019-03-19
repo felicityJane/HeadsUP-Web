@@ -1,0 +1,49 @@
+﻿@using SensorData = MvcApplication.Model.SensorData
+@model IEnumerable<SensorData>
+
+
+<div class="row">
+    <div class="container">
+        <div class="row">
+            <h1>Heads UP - Sensor Data</h1>
+            <div class="list-group">
+                @foreach (var item in Model)
+                {
+                    <div class="list-group-item">
+                        <div>
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    @Html.LabelFor(model =>item.DateTime);
+                                </dt>
+
+                                <dd>
+                                   @Html.DisplayFor(model =>item.DateTime)
+                                </dd>
+
+                                <dt>
+                                    @Html.LabelFor(model => item.Distance)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => item.Distance)
+                                </dd>
+
+                                <dt>
+                                    @Html.LabelFor(model => item.UserId)
+                                </dt>
+
+                                <dd>
+                                    @Html.DisplayFor(model => item.UserId)
+                                </dd>
+                                <p>
+                                    @Html.ActionLink("Delete", "Delete", item.UserId)
+                                </p>
+                            </dl>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
