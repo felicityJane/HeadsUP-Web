@@ -24,8 +24,8 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Graph", "Index", "Graph")</li>
-                        <li>@Html.ActionLink("Data", "Data", "Data")</li>
-                        <li>@Html.ActionLink("User", "UserData", "User")</li>
+                        <li>@Html.ActionLink("Data", "Index", "Data")</li>
+                        <li>@Html.ActionLink("User", "Index", "User")</li>
                     }
 
                 </ul>

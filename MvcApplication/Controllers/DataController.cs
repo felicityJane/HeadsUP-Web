@@ -11,14 +11,8 @@ namespace MvcApplication.Controllers
 {
     public class DataController : Controller
     {
-        // GET: Data
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         [CustomAuthorizeRedirect(Roles = "admin")]
-        public async Task<ActionResult> Data()
+        public async Task<ActionResult> Index()
         {
             List<SensorData> data = null;
 
@@ -30,7 +24,7 @@ namespace MvcApplication.Controllers
                 string accessToken = claimsIdentity?.FindFirst(c => c.Type == "access_token")?.Value;
                 // string idToken = claimsIdentity?.FindFirst(c => c.Type == "id_token")?.Value;
 
-                client.BaseAddress = new Uri("http://localhost:54111/sensor/");
+                client.BaseAddress = new Uri("http://headsupapi.azurewebsites.net/sensor/");
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -61,7 +55,7 @@ namespace MvcApplication.Controllers
                 string accessToken = claimsIdentity?.FindFirst(c => c.Type == "access_token")?.Value;
                 // string idToken = claimsIdentity?.FindFirst(c => c.Type == "id_token")?.Value;
 
-                client.BaseAddress = new Uri("http://localhost:54111/sensor/deletesensordata/");
+                client.BaseAddress = new Uri("http://headsupapi.azurewebsites.net/sensor/deletesensordata/");
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -88,7 +82,7 @@ namespace MvcApplication.Controllers
                 string accessToken = claimsIdentity?.FindFirst(c => c.Type == "access_token")?.Value;
                 // string idToken = claimsIdentity?.FindFirst(c => c.Type == "id_token")?.Value;
 
-                client.BaseAddress = new Uri("http://localhost:54111/sensor/deletesensordataUser/");
+                client.BaseAddress = new Uri("http://headsupapi.azurewebsites.net/deletesensordataUser/");
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

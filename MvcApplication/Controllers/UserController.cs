@@ -11,14 +11,8 @@ namespace MvcApplication.Controllers
 {
     public class UserController : Controller
     {
-        // GET: User
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         [CustomAuthorizeRedirect(Roles = "admin")]
-        public async Task<ActionResult> UserData()
+        public async Task<ActionResult> Index()
         {
             List<User> user = null;
 
@@ -30,7 +24,7 @@ namespace MvcApplication.Controllers
                 string accessToken = claimsIdentity?.FindFirst(c => c.Type == "access_token")?.Value;
                 //string idToken = claimsIdentity?.FindFirst(c => c.Type == "id_token")?.Value;
 
-                client.BaseAddress = new Uri("http://localhost:54111/user/");
+                client.BaseAddress = new Uri("http://headsupapi.azurewebsites.net/user/");
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
@@ -61,7 +55,7 @@ namespace MvcApplication.Controllers
                 string accessToken = claimsIdentity?.FindFirst(c => c.Type == "access_token")?.Value;
                 // string idToken = claimsIdentity?.FindFirst(c => c.Type == "id_token")?.Value;
 
-                client.BaseAddress = new Uri("http://localhost:54111/user/deleteuser/");
+                client.BaseAddress = new Uri("http://headsupapi.azurewebsites.net/user/deleteuser/");
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
